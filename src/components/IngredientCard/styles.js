@@ -7,13 +7,16 @@ export const styles = StyleSheet.create({
         backgroundColor:"white",
         alignItems:"center",
         margin: 4,
-        padding:12,
+        padding:16,
         borderRadius:8,
+        justifyContent:"center"
     },
     image: {
-
+        height:40,
+        width:40,
     },
     text: {
-        marginTop:4,
+        marginTop:12,
+        fontSize: 16,
     },
 })

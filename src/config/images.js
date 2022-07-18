@@ -8,3 +8,7 @@ export const icons ={
     settings: require("../assets/icons/settings.png"),
     close: require("../assets/icons/close.png"),
 }
+
+export const ingredients = {
+    lime: require("../assets/ingredients/lime.png"),
+}

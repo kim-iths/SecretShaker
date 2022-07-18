@@ -2,7 +2,7 @@ import { View, Text, FlatList, ScrollView } from 'react-native'
 import React from 'react'
 import { styles } from './styles'
 import SelectedIngredientCard from '../../components/SelectedIngredientCard/SelectedIngredientCard'
-import { icons } from '../../config/images'
+import { icons, ingredients } from '../../config/images'
 import IngredientCard from '../../components/IngredientCard/IngredientCard'
 
 const IngredientsScreen = ({ isDareMode }) => {
@@ -20,29 +20,25 @@ const IngredientsScreen = ({ isDareMode }) => {
     ]
 
     const mockIngredients = [
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-        { text: "Lemon", image: icons.drink },
-    ]
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
+        { text: "Lime", image: ingredients.lime },
 
+    ]
 
     const renderItemSelected = ({ item, index }) => {
         // const isEven = index % 2 == 0
