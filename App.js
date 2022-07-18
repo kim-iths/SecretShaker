@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './src/screens/HomeScreen/HomeScreen';
+import IngredientsScreen from './src/screens/IngredientsScreen/IngredientsScreen';
 
 const Stack = createNativeStackNavigator()
 export default function App() {
@@ -10,7 +11,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name='Home' component={HomeScreen} options={{headerShown: false}}/>
-        <Stack.Screen name='IngredientsScreen' component={HomeScreen} options={{headerShown: false}}/>
+        <Stack.Screen name='IngredientsScreen' component={IngredientsScreen} options={{title:"Select ingredients"}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
