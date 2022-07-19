@@ -12,8 +12,12 @@ const IngredientCard = ({ text, image, onPress }) => {
       }}
       onPress={onPress}
     >
-      <Image source={image} style={styles.image} />
-      <Text style={styles.text}>{text}</Text>
+      <View style={{ flex: 1, justifyContent: "flex-end" }}>
+        <Image source={image} style={styles.image} />
+      </View>
+      <View style={{ flex: 1, justifyContent: "center", }}>
+        <Text style={styles.text}>{text}</Text>
+      </View>
     </TouchableOpacity>
   )
 }

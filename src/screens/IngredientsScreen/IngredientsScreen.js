@@ -1,11 +1,14 @@
 import { View, Text, FlatList, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { styles } from './styles'
 import SelectedIngredientCard from '../../components/SelectedIngredientCard/SelectedIngredientCard'
 import { icons, ingredients } from '../../config/images'
 import IngredientCard from '../../components/IngredientCard/IngredientCard'
+import { listIngredients } from '../../config/lists'
 
 const IngredientsScreen = ({ isDareMode }) => {
+
+    const [selectedIngredients, setSelectedIngredients] = useState([])
 
     const mockSelectedIngredients = [
         "Lemon",
@@ -21,23 +24,19 @@ const IngredientsScreen = ({ isDareMode }) => {
 
     const mockIngredients = [
         { text: "Lime", image: ingredients.lime },
+        { text: "Lemon", image: ingredients.lemon },
         { text: "Lime", image: ingredients.lime },
+        { text: "Lemon", image: ingredients.lemon },
         { text: "Lime", image: ingredients.lime },
+        { text: "Lemon", image: ingredients.lemon },
         { text: "Lime", image: ingredients.lime },
+        { text: "Lemon", image: ingredients.lemon },
         { text: "Lime", image: ingredients.lime },
+        { text: "Lemon", image: ingredients.lemon },
         { text: "Lime", image: ingredients.lime },
+        { text: "Lemon", image: ingredients.lemon },
         { text: "Lime", image: ingredients.lime },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lime", image: ingredients.lime },
-
+        { text: "Lemon", image: ingredients.lemon },
     ]
 
     const renderItemSelected = ({ item, index }) => {
@@ -56,31 +55,32 @@ const IngredientsScreen = ({ isDareMode }) => {
     const renderItem = ({ item, index }) => {
 
         return (
-            <IngredientCard text={item.text} image={item.image} onPress={() => { }} />
+            <IngredientCard text={item.name} image={item.image} onPress={() => { }} />
         )
     }
 
     return (
-        <ScrollView style={styles.container} contentContainerStyle={{paddingBottom:16}}>
-            <Text style={{ color: "white", marginBottom: 16, fontSize: 16 }}>Selected ingredients (9/10)</Text>
+        <View style={styles.container}>
             <FlatList
-            contentContainerStyle={{paddingBottom:16}}
+                ListHeaderComponent={<View>
+                    <Text style={{ color: "white", marginBottom: 16, fontSize: 16 }}>Selected ingredients (9/10)</Text>
+                    <FlatList
+                        numColumns={2}
+                        data={mockSelectedIngredients}
+                        renderItem={renderItemSelected}
+                        keyExtractor={(item, index) => index}
+                    />
+                    <Text style={{ color: "white", marginVertical: 16, fontSize: 16 }}>Choose ingredients</Text>
 
-                numColumns={2}
-                data={mockSelectedIngredients}
-                renderItem={renderItemSelected}
+                </View>}
+                style={{padding:16}}
+                contentContainerStyle={{ paddingBottom: 32 }}
+                numColumns={3}
+                data={listIngredients}
+                renderItem={renderItem}
                 keyExtractor={(item, index) => index}
             />
-            <Text style={{ color: "white", marginBottom: 16, fontSize: 16 }}>Choose ingredients</Text>
-            <FlatList 
-            contentContainerStyle={{paddingBottom:16}}
-                numColumns={3}
-                data={mockIngredients}
-                renderItem={renderItem}
-                keyExtractor={(item,index) => index}
-            />
-
-        </ScrollView>
+        </View>
     )
 }
 

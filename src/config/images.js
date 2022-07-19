@@ -11,4 +11,5 @@ export const icons ={
 
 export const ingredients = {
     lime: require("../assets/ingredients/lime.png"),
+    lemon: require("../assets/ingredients/lemon.png"),
 }

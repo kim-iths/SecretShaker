@@ -7,16 +7,19 @@ export const styles = StyleSheet.create({
         backgroundColor:"white",
         alignItems:"center",
         margin: 4,
-        padding:16,
+        paddingVertical:8,
+        paddingHorizontal:8,
         borderRadius:8,
-        justifyContent:"center"
+        // justifyContent:"space-between"
+        // justifyContent:"center"
     },
     image: {
         height:40,
         width:40,
+        resizeMode:"contain",
     },
     text: {
-        marginTop:12,
+        textAlign:"center",
         fontSize: 16,
     },
 })
