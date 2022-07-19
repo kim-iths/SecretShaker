@@ -7,6 +7,7 @@ export const icons ={
     info: require("../assets/icons/info.png"),
     settings: require("../assets/icons/settings.png"),
     close: require("../assets/icons/close.png"),
+    check: require("../assets/icons/check.png"),
 }
 
 export const ingredients = {

@@ -42,20 +42,35 @@ const IngredientsScreen = ({ isDareMode }) => {
     const renderItemSelected = ({ item, index }) => {
         // const isEven = index % 2 == 0
         // console.log(item + " is " + isEven);
-        const isLastUneven = index == mockSelectedIngredients.length - 1 && index % 2 == 0
+        const isLastUneven = index == selectedIngredients.length - 1 && index % 2 == 0
 
         // if(isEven) console.log(item + " is even")
-        console.log(item);
+        // console.log(item);
         if (isLastUneven) console.log(item + " is last and uneven")
         return (
-            <SelectedIngredientCard text={item} onPress={() => { }} isLastUneven={isLastUneven} />
+            <SelectedIngredientCard text={item} isLastUneven={isLastUneven}
+                onPress={() => {
+
+                }} />
         )
     }
 
     const renderItem = ({ item, index }) => {
 
         return (
-            <IngredientCard text={item.name} image={item.image} onPress={() => { }} />
+            <IngredientCard text={item.name} image={item.image}
+                onPress={() => {
+                    const newSelectedIngredients = [...selectedIngredients]
+
+                    const isSelectedAtIndex = selectedIngredients.indexOf(item.name)
+                    if (isSelectedAtIndex != -1) {
+                        newSelectedIngredients.splice(isSelectedAtIndex, 1)
+                    } else {
+                        newSelectedIngredients.push(item.name)
+                    }
+
+                    setSelectedIngredients(newSelectedIngredients)
+                }} />
         )
     }
 
@@ -63,22 +78,26 @@ const IngredientsScreen = ({ isDareMode }) => {
         <View style={styles.container}>
             <FlatList
                 ListHeaderComponent={<View>
-                    <Text style={{ color: "white", marginBottom: 16, fontSize: 16 }}>Selected ingredients (9/10)</Text>
+                    <Text style={{ color: "white", marginBottom: 16, fontSize: 16 }}>{`Selected ingredients (${selectedIngredients.length}/10)`}</Text>
                     <FlatList
                         numColumns={2}
-                        data={mockSelectedIngredients}
+                        data={selectedIngredients}
                         renderItem={renderItemSelected}
                         keyExtractor={(item, index) => index}
+                        ListEmptyComponent={<View>
+                            <Text style={{color:"#c0c0c0",marginLeft:8 }}>No ingredients selected</Text>
+                        </View>}
                     />
                     <Text style={{ color: "white", marginVertical: 16, fontSize: 16 }}>Choose ingredients</Text>
 
                 </View>}
-                style={{padding:16}}
+                style={{ padding: 16 }}
                 contentContainerStyle={{ paddingBottom: 32 }}
                 numColumns={3}
                 data={listIngredients}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index}
+                
             />
         </View>
     )
