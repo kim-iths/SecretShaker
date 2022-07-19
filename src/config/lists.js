@@ -11,8 +11,11 @@ export const listIngredients = [
     {name: "Sugar", image: icons.close},
     {name: "Salt", image: icons.close},
     {name: "Milk", image: icons.close},
-    {name: "Orange juice", image: icons.close},
     {name: "Coffee", image: icons.close},
+    {name: "Apple juice", image: icons.close},
+    {name: "Orange juice", image: icons.close},
+    {name: "Pineapple juice", image: icons.close},
+    {name: "Cream", image: icons.close},
 ]
 
 export const listGlassTypes = [
