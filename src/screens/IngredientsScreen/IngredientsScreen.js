@@ -1,45 +1,14 @@
-import { View, Text, FlatList, ScrollView } from 'react-native'
-import React, { useRef, useState } from 'react'
+import { View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
 import { styles } from './styles'
 import SelectedIngredientCard from '../../components/SelectedIngredientCard/SelectedIngredientCard'
-import { icons, ingredients } from '../../config/images'
 import IngredientCard from '../../components/IngredientCard/IngredientCard'
 import { listIngredients } from '../../config/lists'
+import { colors } from '../../config/theme'
 
 const IngredientsScreen = ({ isDareMode }) => {
 
     const [selectedIngredients, setSelectedIngredients] = useState([])
-
-    // const ingredientsRef = useRef([])
-
-    const mockSelectedIngredients = [
-        "Lemon",
-        "Grenadine",
-        "Vodka",
-        "Bitters",
-        "Mint leaves",
-        "Whiskey",
-        "Lime",
-        "Cola",
-        "Orange soda",
-    ]
-
-    const mockIngredients = [
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lemon", image: ingredients.lemon },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lemon", image: ingredients.lemon },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lemon", image: ingredients.lemon },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lemon", image: ingredients.lemon },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lemon", image: ingredients.lemon },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lemon", image: ingredients.lemon },
-        { text: "Lime", image: ingredients.lime },
-        { text: "Lemon", image: ingredients.lemon },
-    ]
 
     const renderItemSelected = ({ item, index }) => {
         const isLastUneven = index == selectedIngredients.length - 1 && index % 2 == 0
@@ -77,9 +46,28 @@ const IngredientsScreen = ({ isDareMode }) => {
 
     return (
         <View style={styles.container}>
+
             <FlatList
                 ListHeaderComponent={<View>
-                    <Text style={{ color: "white", marginBottom: 16, fontSize: 16 }}>{`Selected ingredients (${selectedIngredients.length}/10)`}</Text>
+                    <View style={styles.readyContainer}>
+                        <Text style={[styles.readyTitle,
+                        { color: selectedIngredients.length >= 3 ? colors.DARK_GREEN : colors.DARK_RED }]}>
+                            {selectedIngredients.length < 3 ? "Not Ready" : "Ready"}
+                        </Text>
+                        <Text style={styles.readyDescription}>
+                            {selectedIngredients.length < 3
+                                ? "Choose at least three ingredients to continue."
+                                : "Shake your phone to get a random recipe!"}
+
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => {
+
+                            }}>
+                            <Text style={{flex:1, backgroundColor:"green",marginTop:8, borderRadius:8, padding:8, color:"white"}}>Fetch</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={{ color: "white", marginVertical: 16, fontSize: 16 }}>{`Selected ingredients (${selectedIngredients.length}/10)`}</Text>
                     <FlatList
                         numColumns={2}
                         data={selectedIngredients}
