@@ -18,16 +18,23 @@ const IngredientsScreen = ({ isDareMode }) => {
             let amountIngredients = 0
             let amountCorrectIngredients = 0
             for (let i = 1; i < 15; i++) {
-                
+
                 if (d[`strIngredient${i}`] == null) { break } else amountIngredients++
-                
-                
+
+
                 selectedIngredients.forEach(sel => {
-                    if (d[`strIngredient${i}`].toLowerCase() == (sel.toLowerCase() || "ice")) {
-                        amountCorrectIngredients++
-                    } 
+                    const checkIngredient = (ing) => {
+                        if (d[`strIngredient${i}`].toLowerCase() == (ing.toLowerCase() || "ice")) {
+                            amountCorrectIngredients++
+                        }
+                    }
+
+                    checkIngredient(sel.name)
                     
-                    
+                    //Checks again if ingredient n has inferred ingredients
+                    sel.inferred.forEach(inf => {
+                        checkIngredient(inf)
+                    })
 
                 })
 
@@ -41,21 +48,23 @@ const IngredientsScreen = ({ isDareMode }) => {
 
             }
 
-            if(amountIngredients == amountCorrectIngredients) compatibleDrinks.push(d.strDrink)
+            if (amountIngredients == amountCorrectIngredients) compatibleDrinks.push(d.strDrink)
         })
         return compatibleDrinks
     }
 
 
     const renderItemSelected = ({ item, index }) => {
+        const { name, inferred } = item
+
         const isLastUneven = index == selectedIngredients.length - 1 && index % 2 == 0
 
         // if (isLastUneven) console.log(item + " is last and uneven")
         return (
-            <SelectedIngredientCard text={item} isLastUneven={isLastUneven}
+            <SelectedIngredientCard text={name} isLastUneven={isLastUneven}
                 onPress={() => {
                     const newIngredients = [...selectedIngredients]
-                    newIngredients.splice(selectedIngredients.indexOf(item), 1)
+                    newIngredients.splice(selectedIngredients.findIndex(o => o.name == name), 1)
                     setSelectedIngredients(newIngredients)
                 }} />
         )
@@ -63,24 +72,21 @@ const IngredientsScreen = ({ isDareMode }) => {
 
     const renderItem = ({ item, index }) => {
 
-    const { name, image, inferred = []} = item
+        const { name, image, inferred = [] } = item
 
         return (
             <IngredientCard text={name} image={image}
-                isSelected={selectedIngredients.indexOf(name) != -1}
+                isSelected={selectedIngredients.findIndex(o => o.name == name) != -1}
                 onPress={() => {
-
-                    // console.log(inferred);
-
                     const newIngredients = [...selectedIngredients]
 
-                    const isSelectedAtIndex = selectedIngredients.indexOf(name)
+                    const isSelectedAtIndex = selectedIngredients.findIndex(o => o.name == name)
                     if (isSelectedAtIndex != -1) {
                         newIngredients.splice(isSelectedAtIndex, 1)
                     } else {
-                        let ing = {name: name, inferred: [...inferred]}
-                        // console.log(ing);
-                        newIngredients.push(name)
+                        let ing = { name: name, inferred: [...inferred] }
+
+                        newIngredients.push(ing)
                     }
 
                     setSelectedIngredients(newIngredients)
@@ -107,7 +113,7 @@ const IngredientsScreen = ({ isDareMode }) => {
                         <TouchableOpacity
                             onPress={() => {
                                 const compatibleDrinks = getCompatibleDrinks()
-                                console.log(compatibleDrinks);
+                                console.log(compatibleDrinks.length);
                             }}>
                             <Text style={{
                                 flex: 1, backgroundColor: "green",
