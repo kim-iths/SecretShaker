@@ -23,9 +23,11 @@ const IngredientsScreen = ({ isDareMode }) => {
                 
                 
                 selectedIngredients.forEach(sel => {
-                    if (d[`strIngredient${i}`] == (sel || "Ice")) {
+                    if (d[`strIngredient${i}`].toLowerCase() == (sel.toLowerCase() || "ice")) {
                         amountCorrectIngredients++
-                    }
+                    } 
+                    
+                    
 
                 })
 
@@ -61,17 +63,24 @@ const IngredientsScreen = ({ isDareMode }) => {
 
     const renderItem = ({ item, index }) => {
 
+    const { name, image, inferred = []} = item
+
         return (
-            <IngredientCard text={item.name} image={item.image}
-                isSelected={selectedIngredients.indexOf(item.name) != -1}
+            <IngredientCard text={name} image={image}
+                isSelected={selectedIngredients.indexOf(name) != -1}
                 onPress={() => {
+
+                    // console.log(inferred);
+
                     const newIngredients = [...selectedIngredients]
 
-                    const isSelectedAtIndex = selectedIngredients.indexOf(item.name)
+                    const isSelectedAtIndex = selectedIngredients.indexOf(name)
                     if (isSelectedAtIndex != -1) {
                         newIngredients.splice(isSelectedAtIndex, 1)
                     } else {
-                        newIngredients.push(item.name)
+                        let ing = {name: name, inferred: [...inferred]}
+                        // console.log(ing);
+                        newIngredients.push(name)
                     }
 
                     setSelectedIngredients(newIngredients)
