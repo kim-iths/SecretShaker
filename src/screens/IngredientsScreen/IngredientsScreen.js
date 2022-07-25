@@ -21,31 +21,20 @@ const IngredientsScreen = ({ isDareMode }) => {
 
                 if (d[`strIngredient${i}`] == null) { break } else amountIngredients++
 
-
                 selectedIngredients.forEach(sel => {
                     const checkIngredient = (ing) => {
-                        if (d[`strIngredient${i}`].toLowerCase() == (ing.toLowerCase() || "ice")) {
+                        if (d[`strIngredient${i}`].toLowerCase() == ing.toLowerCase()) {
                             amountCorrectIngredients++
                         }
                     }
 
                     checkIngredient(sel.name)
-                    
+
                     //Checks again if ingredient n has inferred ingredients
                     sel.inferred.forEach(inf => {
                         checkIngredient(inf)
                     })
-
                 })
-
-                // if (d[`strIngredient${i}`] == sel) {
-
-                //     // listIngredients.push(d[`strIngredient${i}`])
-
-                // } else if (d[`strIngredient${i}`] == null) {
-                //     return
-                // }
-
             }
 
             if (amountIngredients == amountCorrectIngredients) compatibleDrinks.push(d.strDrink)
@@ -59,7 +48,6 @@ const IngredientsScreen = ({ isDareMode }) => {
 
         const isLastUneven = index == selectedIngredients.length - 1 && index % 2 == 0
 
-        // if (isLastUneven) console.log(item + " is last and uneven")
         return (
             <SelectedIngredientCard text={name} isLastUneven={isLastUneven}
                 onPress={() => {
@@ -113,6 +101,7 @@ const IngredientsScreen = ({ isDareMode }) => {
                         <TouchableOpacity
                             onPress={() => {
                                 const compatibleDrinks = getCompatibleDrinks()
+                                console.log(compatibleDrinks);
                                 console.log(compatibleDrinks.length);
                             }}>
                             <Text style={{
@@ -137,7 +126,20 @@ const IngredientsScreen = ({ isDareMode }) => {
                         </View>}
                     />
                     <Text style={{ color: "white", marginVertical: 16, fontSize: 16 }}>Choose ingredients</Text>
-
+                    <TouchableOpacity
+                        onPress={() => {
+                            setSelectedIngredients(listIngredients.map(i => {
+                                const { name, inferred = [] } = i
+                                return { name: name, inferred: [...inferred] }
+                            }))
+                        }}
+                    >
+                        <Text style={{
+                            flex: 1, backgroundColor: "green",
+                            marginTop: 8, borderRadius: 8,
+                            padding: 8, color: "white"
+                        }}>Select all</Text>
+                    </TouchableOpacity>
                 </View>}
                 style={{ padding: 16 }}
                 contentContainerStyle={{ paddingBottom: 32 }}
@@ -147,7 +149,7 @@ const IngredientsScreen = ({ isDareMode }) => {
                 keyExtractor={(item, index) => index}
 
             />
-        </View>
+        </View >
     )
 }
 
