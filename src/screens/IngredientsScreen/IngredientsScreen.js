@@ -1,8 +1,8 @@
 import { View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { styles } from './styles'
 import SelectedIngredientCard from '../../components/SelectedIngredientCard/SelectedIngredientCard'
-import IngredientCard from '../../components/IngredientCard/IngredientCard'
+import IngredientCard, { MemoIngredientCard } from '../../components/IngredientCard/IngredientCard'
 import { listIngredients } from '../../config/lists'
 import { colors } from '../../config/theme'
 import drinks from '../../config/drinks.json'
@@ -42,7 +42,6 @@ const IngredientsScreen = ({ isDareMode }) => {
         return compatibleDrinks
     }
 
-
     const renderItemSelected = ({ item, index }) => {
         const { name, inferred } = item
 
@@ -61,12 +60,15 @@ const IngredientsScreen = ({ isDareMode }) => {
     const renderItem = ({ item, index }) => {
 
         const { name, image, inferred = [] } = item
+        const isSelected = selectedIngredients.findIndex(o => o.name == name) != -1
 
         return (
             <IngredientCard text={name} image={image}
-                isSelected={selectedIngredients.findIndex(o => o.name == name) != -1}
+                isSelected={isSelected}
                 onPress={() => {
                     const newIngredients = [...selectedIngredients]
+
+                    console.log(name + " " + isSelected);
 
                     const isSelectedAtIndex = selectedIngredients.findIndex(o => o.name == name)
                     if (isSelectedAtIndex != -1) {
@@ -78,7 +80,9 @@ const IngredientsScreen = ({ isDareMode }) => {
                     }
 
                     setSelectedIngredients(newIngredients)
-                }} />
+                }
+            } 
+            />
         )
     }
 
@@ -101,7 +105,7 @@ const IngredientsScreen = ({ isDareMode }) => {
                         <TouchableOpacity
                             onPress={() => {
                                 const compatibleDrinks = getCompatibleDrinks()
-                                console.log(compatibleDrinks);
+                                // console.log(compatibleDrinks);
                                 console.log(compatibleDrinks.length);
                             }}>
                             <Text style={{
@@ -141,12 +145,12 @@ const IngredientsScreen = ({ isDareMode }) => {
                         }}>Select all</Text>
                     </TouchableOpacity>
                 </View>}
-                style={{ padding: 16 }}
-                contentContainerStyle={{ paddingBottom: 32 }}
+                style={{ padding: 16, }}
+                contentContainerStyle={{ paddingBottom: 32, }}
                 numColumns={3}
                 data={listIngredients}
                 renderItem={renderItem}
-                keyExtractor={(item, index) => index}
+                keyExtractor={item => item.name}
 
             />
         </View >
