@@ -1,15 +1,22 @@
-import { View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import { View, Text, FlatList, ScrollView, TouchableOpacity, Modal, Pressable, Image } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
 import { styles } from './styles'
 import SelectedIngredientCard from '../../components/SelectedIngredientCard/SelectedIngredientCard'
 import IngredientCard, { MemoIngredientCard } from '../../components/IngredientCard/IngredientCard'
 import { listIngredients } from '../../config/lists'
 import { colors } from '../../config/theme'
 import drinks from '../../config/drinks.json'
+import { icons, images } from '../../config/images'
 
 const IngredientsScreen = ({ isDareMode }) => {
 
     const [selectedIngredients, setSelectedIngredients] = useState([])
+    const [availableDrinks, setAvailableDrinks] = useState(0)
+    const [showModal, setShowModal] = useState(false)
+
+    useEffect(() => {
+        setAvailableDrinks(getCompatibleDrinks().length)
+    }, [selectedIngredients])
 
     const getCompatibleDrinks = () => {
         let compatibleDrinks = []
@@ -37,7 +44,7 @@ const IngredientsScreen = ({ isDareMode }) => {
                 })
             }
 
-            if (amountIngredients == amountCorrectIngredients) compatibleDrinks.push(d.strDrink)
+            if (amountIngredients == amountCorrectIngredients) compatibleDrinks.push(d)
         })
         return compatibleDrinks
     }
@@ -57,56 +64,106 @@ const IngredientsScreen = ({ isDareMode }) => {
         )
     }
 
+    const onItemPress = (item) => {
+        const { name, image, inferred = [] } = item
+
+        const newIngredients = [...selectedIngredients]
+
+        const isSelectedAtIndex = selectedIngredients.findIndex(o => o.name == name)
+        if (isSelectedAtIndex != -1) {
+            newIngredients.splice(isSelectedAtIndex, 1)
+        } else {
+            let ing = { name: name, inferred: [...inferred] }
+
+            newIngredients.push(ing)
+        }
+
+        setSelectedIngredients(newIngredients)
+    }
     const renderItem = ({ item, index }) => {
 
-        const { name, image, inferred = [] } = item
+        const { name, image, inferred = [], } = item
         const isSelected = selectedIngredients.findIndex(o => o.name == name) != -1
 
         return (
             <IngredientCard text={name} image={image}
                 isSelected={isSelected}
-                onPress={() => {
-                    const newIngredients = [...selectedIngredients]
-
-                    console.log(name + " " + isSelected);
-
-                    const isSelectedAtIndex = selectedIngredients.findIndex(o => o.name == name)
-                    if (isSelectedAtIndex != -1) {
-                        newIngredients.splice(isSelectedAtIndex, 1)
-                    } else {
-                        let ing = { name: name, inferred: [...inferred] }
-
-                        newIngredients.push(ing)
-                    }
-
-                    setSelectedIngredients(newIngredients)
-                }
-            } 
+                onPress={() => onItemPress(item)}
             />
+        )
+    }
+
+    const drinkModal = () => {
+
+        const compatibleDrinks = getCompatibleDrinks()
+        const chosenDrink = compatibleDrinks[Math.floor(Math.random() * compatibleDrinks.length)]
+
+        return (
+            <Modal visible={showModal}
+                animationType="fade"
+                transparent={true}>
+
+                <View style={styles.modalBackground} />
+
+                <View style={styles.modalContainer}>
+                    
+                    <View>
+                        <Pressable
+                            onPress={() => setShowModal(false)}>
+                            <Image source={icons.close} style={{
+                                height: 32, width: 32,
+                                top: 0, right: 0, position: "absolute",
+                            }} />
+                        </Pressable>
+                    </View>
+
+                    <View>
+                        <Text
+                            style={{
+                                textAlign: "center", fontSize: 20, fontWeight: "bold",
+                                marginBottom: 16
+                            }}
+                        >You got:</Text>
+                        <Image
+                            style={{ width: '100%', flexGrow: 1, borderRadius: 999, 
+                        aspectRatio:1}}
+                            source={{ uri: chosenDrink.strDrinkThumb }} />
+                        <Text
+                            style={{
+                                textAlign: "center", fontSize: 32, fontWeight: "bold",
+                                marginTop: 16
+                            }}
+                        >{chosenDrink.strDrink}</Text>
+                    </View>
+                    <View />
+                </View>
+            </Modal>
         )
     }
 
     return (
         <View style={styles.container}>
-
             <FlatList
                 ListHeaderComponent={<View>
                     <View style={styles.readyContainer}>
                         <Text style={[styles.readyTitle,
-                        { color: selectedIngredients.length >= 3 ? colors.DARK_GREEN : colors.DARK_RED }]}>
-                            {selectedIngredients.length < 3 ? "Not Ready" : "Ready"}
+                        { color: availableDrinks > 0 ? colors.DARK_GREEN : colors.DARK_RED }]}>
+                            {selectedIngredients.length >= 3 && availableDrinks > 0
+                                ? `Ready - ${availableDrinks} drinks available` : "Not Ready"}
                         </Text>
                         <Text style={styles.readyDescription}>
-                            {selectedIngredients.length < 3
-                                ? "Choose at least three ingredients to continue."
-                                : "Shake your phone to get a random recipe!"}
+                            {selectedIngredients.length >= 3
+                                ? (availableDrinks > 0
+                                    ? "Shake your phone to get a random recipe!"
+                                    : "No drinks available, add more ingredients!")
+                                : "Choose at least three ingredients to continue."}
 
                         </Text>
                         <TouchableOpacity
                             onPress={() => {
-                                const compatibleDrinks = getCompatibleDrinks()
-                                // console.log(compatibleDrinks);
-                                console.log(compatibleDrinks.length);
+                                // const compatibleDrinks = getCompatibleDrinks()
+                                // console.log(compatibleDrinks.length);
+                                setShowModal(true)
                             }}>
                             <Text style={{
                                 flex: 1, backgroundColor: "green",
@@ -153,6 +210,7 @@ const IngredientsScreen = ({ isDareMode }) => {
                 keyExtractor={item => item.name}
 
             />
+            {showModal ? drinkModal() : null}
         </View >
     )
 }

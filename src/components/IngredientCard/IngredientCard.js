@@ -3,8 +3,8 @@ import React, { forwardRef, memo, PureComponent, useState } from 'react'
 import { styles } from './styles'
 import { icons } from '../../config/images'
 
-const IngredientCard = ({ text, image, onPress, isSelected }) => {
-
+const IngredientCard = (props) => {
+  const { text, image, onPress, isSelected } = props
   const [itemWidth, setItemWidth] = useState(null)
 
   return (
@@ -32,14 +32,14 @@ const IngredientCard = ({ text, image, onPress, isSelected }) => {
   )
 }
 
-// const areEqual = (prevProps, nextProps) => {
-//   const { isSelected } = nextProps;
-//   const { isSelected: prevIsSelected } = prevProps;
-  
-//   const isSelectedEqual = isSelected === prevIsSelected;
+const areEqual = (prevProps, nextProps) => {
+  const { isSelected } = nextProps;
+  const { isSelected: prevIsSelected } = prevProps;
 
-//   return isSelectedEqual;
-// };
+  const isSelectedEqual = isSelected === prevIsSelected;
+
+  return isSelectedEqual;
+};
 
 // export default React.memo(IngredientCard, areEqual)
 // export default React.memo(IngredientCard)
