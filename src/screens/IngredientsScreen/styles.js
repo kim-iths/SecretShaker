@@ -9,11 +9,11 @@ export const styles = StyleSheet.create({
     readyContainer: {
         borderRadius: 8,
         padding: 16,
-        backgroundColor:"white",
+        backgroundColor: "white",
     },
     readyTitle: {
-        fontWeight:"bold",
-        fontSize:18,
+        fontWeight: "bold",
+        fontSize: 18,
     },
     readyDescription: {
 
@@ -21,19 +21,31 @@ export const styles = StyleSheet.create({
     modalBackground: {
         backgroundColor: "black",
         opacity: 0.5,
-        position:"absolute",
-        top:0,
-        bottom:0,
-        right:0,
-        left:0,
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
     },
     modalContainer: {
         flex: 1,
-        backgroundColor:"white",
+        backgroundColor: "white",
         margin: 16,
         padding: 16,
-        borderRadius:16,
-        justifyContent:"space-between",
+        borderRadius: 16,
+        justifyContent: "space-between",
     },
-    
+    modalDrinkImage: {
+        width: '100%',
+        flexGrow: 1,
+        borderRadius: 999,
+        aspectRatio: 1,
+        marginVertical: 16,
+    },
+    modalTextLarge: {
+        textAlign: "center",
+        fontSize: 20,
+        fontWeight: "bold",
+    }
+
 })

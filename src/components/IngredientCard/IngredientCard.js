@@ -15,7 +15,7 @@ const IngredientCard = (props) => {
       onLayout={(e) => {
         setItemWidth(e.nativeEvent.layout.width)
       }}
-      onPress={onPress}
+      onPress={() => onPress()}
     >
       {/* {console.log("Rendy " + text)} */}
       <View style={{ flex: 1, }}>
@@ -35,12 +35,14 @@ const IngredientCard = (props) => {
 const areEqual = (prevProps, nextProps) => {
   const { isSelected } = nextProps;
   const { isSelected: prevIsSelected } = prevProps;
+  const { text } = nextProps
+  const { text: prevText } = prevProps
 
-  const isSelectedEqual = isSelected === prevIsSelected;
+  const isSelectedEqual = (isSelected === prevIsSelected)
 
   return isSelectedEqual;
 };
 
-// export default React.memo(IngredientCard, areEqual)
+export default React.memo(IngredientCard, areEqual)
 // export default React.memo(IngredientCard)
-export default IngredientCard
+// export default IngredientCard

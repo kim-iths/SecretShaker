@@ -1,5 +1,5 @@
-import { View, Text, FlatList, ScrollView, TouchableOpacity, Modal, Pressable, Image } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import { View, Text, FlatList, ScrollView, TouchableOpacity, Modal, Pressable, Image, ToastAndroid } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { styles } from './styles'
 import SelectedIngredientCard from '../../components/SelectedIngredientCard/SelectedIngredientCard'
 import IngredientCard, { MemoIngredientCard } from '../../components/IngredientCard/IngredientCard'
@@ -13,12 +13,16 @@ const IngredientsScreen = ({ isDareMode }) => {
     const [selectedIngredients, setSelectedIngredients] = useState([])
     const [availableDrinks, setAvailableDrinks] = useState(0)
     const [showModal, setShowModal] = useState(false)
+    const [lastIngredientPressed, setLastIngredientPressed] = useState(null)
+
+    const selIngRef = useRef([])
 
     useEffect(() => {
-        setAvailableDrinks(getCompatibleDrinks().length)
+        // setAvailableDrinks(getCompatibleDrinks().length)
+        selIngRef.current = selectedIngredients
     }, [selectedIngredients])
 
-    const getCompatibleDrinks = () => {
+    function getCompatibleDrinks() {
         let compatibleDrinks = []
 
         drinks.drinks.forEach(d => {
@@ -59,6 +63,7 @@ const IngredientsScreen = ({ isDareMode }) => {
                 onPress={() => {
                     const newIngredients = [...selectedIngredients]
                     newIngredients.splice(selectedIngredients.findIndex(o => o.name == name), 1)
+                    setLastIngredientPressed(null)
                     setSelectedIngredients(newIngredients)
                 }} />
         )
@@ -67,9 +72,9 @@ const IngredientsScreen = ({ isDareMode }) => {
     const onItemPress = (item) => {
         const { name, image, inferred = [] } = item
 
-        const newIngredients = [...selectedIngredients]
+        const newIngredients = [...selIngRef.current]
 
-        const isSelectedAtIndex = selectedIngredients.findIndex(o => o.name == name)
+        const isSelectedAtIndex = newIngredients.findIndex(o => o.name == name)
         if (isSelectedAtIndex != -1) {
             newIngredients.splice(isSelectedAtIndex, 1)
         } else {
@@ -80,8 +85,8 @@ const IngredientsScreen = ({ isDareMode }) => {
 
         setSelectedIngredients(newIngredients)
     }
-    const renderItem = ({ item, index }) => {
 
+    const renderItem = ({ item }) => {
         const { name, image, inferred = [], } = item
         const isSelected = selectedIngredients.findIndex(o => o.name == name) != -1
 
@@ -98,47 +103,45 @@ const IngredientsScreen = ({ isDareMode }) => {
         const compatibleDrinks = getCompatibleDrinks()
         const chosenDrink = compatibleDrinks[Math.floor(Math.random() * compatibleDrinks.length)]
 
-        return (
-            <Modal visible={showModal}
-                animationType="fade"
-                transparent={true}>
+        console.log(chosenDrink);
 
-                <View style={styles.modalBackground} />
+        if (!chosenDrink) {
+            ToastAndroid.show("No drinks available, add more ingredients!", ToastAndroid.SHORT)
+            setShowModal(false)
+            return
+        } else {
+            return (
+                <Modal visible={showModal}
+                    animationType="fade"
+                    transparent={true}>
 
-                <View style={styles.modalContainer}>
-                    
-                    <View>
-                        <Pressable
-                            onPress={() => setShowModal(false)}>
-                            <Image source={icons.close} style={{
-                                height: 32, width: 32,
-                                top: 0, right: 0, position: "absolute",
-                            }} />
-                        </Pressable>
+                    <View style={styles.modalBackground} />
+
+                    <View style={styles.modalContainer}>
+
+                        <View>
+                            <Pressable
+                                onPress={() => setShowModal(false)}>
+                                <Image source={icons.close} style={{
+                                    height: 32, width: 32,
+                                    top: 0, right: 0, position: "absolute",
+                                }} />
+                            </Pressable>
+                        </View>
+
+                        <View>
+                            <Text
+                                style={[styles.modalTextLarge, { fontSize: 20 }]}>You got:</Text>
+                            <Image
+                                style={styles.modalDrinkImage}
+                                source={{ uri: chosenDrink.strDrinkThumb }} />
+                            <Text style={[styles.modalTextLarge, { fontSize: 32 }]}>{chosenDrink.strDrink}</Text>
+                        </View>
+                        <View />
                     </View>
-
-                    <View>
-                        <Text
-                            style={{
-                                textAlign: "center", fontSize: 20, fontWeight: "bold",
-                                marginBottom: 16
-                            }}
-                        >You got:</Text>
-                        <Image
-                            style={{ width: '100%', flexGrow: 1, borderRadius: 999, 
-                        aspectRatio:1}}
-                            source={{ uri: chosenDrink.strDrinkThumb }} />
-                        <Text
-                            style={{
-                                textAlign: "center", fontSize: 32, fontWeight: "bold",
-                                marginTop: 16
-                            }}
-                        >{chosenDrink.strDrink}</Text>
-                    </View>
-                    <View />
-                </View>
-            </Modal>
-        )
+                </Modal>
+            )
+        }
     }
 
     return (
@@ -170,7 +173,7 @@ const IngredientsScreen = ({ isDareMode }) => {
                                 marginTop: 8, borderRadius: 8,
                                 padding: 8, color: "white"
                             }}>
-                                Fetch
+                                Get random drink
                             </Text>
                         </TouchableOpacity>
                     </View>
